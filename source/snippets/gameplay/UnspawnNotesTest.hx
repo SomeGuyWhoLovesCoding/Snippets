@@ -84,12 +84,10 @@ class UnspawnNotesTest extends BaseClassSnippet {
 		super.update(elapsed);
 
 		Conductor.songPosition = flixel.FlxG.sound.music.time;
-		trace(Conductor.songPosition);
 
 		while (UnspawnNotes[UnspawnNotes.length - 1] != null
 			&& Conductor.songPosition > UnspawnNotes[UnspawnNotes.length - 1].StrumTime - (2000))
 		{
-			// var nm:NotesGroup = UnspawnNotes[UnspawnNotes.length-1].isSustainNote ? sustains : notes;
 			var n:Note = new Note(UnspawnNotes[UnspawnNotes.length - 1].StrumTime, UnspawnNotes[UnspawnNotes.length - 1].NoteData, Notes.members[Notes.members.length - 1], false);
 			if (UnspawnNotes[UnspawnNotes.length - 1].SustainLength > (Conductor.stepCrochet * 1.5))
 			{
