@@ -43,7 +43,7 @@ class Paths {
 	}
 }
 
-// The unspawn notes snippet. This shows how you can spawn notes without having to preallocate them.
+// The unspawn notes snippet. This shows how you can spawn notes without having to preallocate them, which saves on loading times.
 // THIS IS THE FIRST EVER SNIPPET IN THIS REPOSITORY.
 
 class UnspawnNotesTest extends BaseClassSnippet {
