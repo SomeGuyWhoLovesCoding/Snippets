@@ -36,13 +36,6 @@ typedef Conductor = {
 	stepCrochet:Float
 }
 
-// This class is needed.
-class Paths {
-	public static function json(key:String):String {
-		return 'assets/data/$key.json';
-	}
-}
-
 // The unspawn notes snippet. This shows how you can spawn notes without having to preallocate them, which saves on loading times.
 // THIS IS THE FIRST EVER SNIPPET IN THIS REPOSITORY.
 
@@ -61,7 +54,7 @@ class UnspawnNotesTest extends BaseClassSnippet {
 	{
 		super.create();
 
-		var P = haxe.Json.parse(Paths.json('test/test-hard'));
+		var P = haxe.Json.parse('assets/data/test/test-hard');
 		UnspawnNotes = P.Gameplay.Notes;
 		EventNotes = P.Gameplay.Events;
 		UnspawnNotes.sort((b, a) -> Std.int(a.StrumTime - b.StrumTime));
