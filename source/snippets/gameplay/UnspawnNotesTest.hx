@@ -47,8 +47,8 @@ class Paths {
 // THIS IS THE FIRST EVER SNIPPET IN THIS REPOSITORY.
 
 class UnspawnNotesTest extends BaseClassSnippet {
-	public var unspawnNotes:Array<ChartNote> = [];
-	public var eventNotes:Array<ChartEvent> = [];
+	public var UnspawnNotes:Array<ChartNote> = [];
+	public var EventNotes:Array<ChartEvent> = [];
 
 	public var camHUD:Dynamic = {zoom = 1.0};
 
@@ -61,65 +61,65 @@ class UnspawnNotesTest extends BaseClassSnippet {
 	{
 		super.create();
 
-		unspawnNotes = haxe.Json.parse(Paths.json('test/test-hard')).Gameplay.Notes;
-		eventNotes = haxe.Json.parse(Paths.json('test/test-hard')).Gameplay.Events;
-		unspawnNotes.sort((b, a) -> Std.int(a.StrumTime - b.StrumTime));
-		eventNotes.sort((b, a) -> Std.int(a.StrumTime - b.StrumTime));
+		UnspawnNotes = haxe.Json.parse(Paths.json('test/test-hard')).Gameplay.Notes;
+		EventNotes = haxe.Json.parse(Paths.json('test/test-hard')).Gameplay.Events;
+		UnspawnNotes.sort((b, a) -> Std.int(a.StrumTime - b.StrumTime));
+		EventNotes.sort((b, a) -> Std.int(a.StrumTime - b.StrumTime));
 	}
 
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
-		while (unspawnNotes[unspawnNotes.length - 1] != null
-			&& conductor.songPosition > unspawnNotes[unspawnNotes.length - 1].StrumTime - (2000 * camHUD.zoom))
+		while (UnspawnNotes[UnspawnNotes.length - 1] != null
+			&& conductor.songPosition > UnspawnNotes[UnspawnNotes.length - 1].StrumTime - (2000 * camHUD.zoom))
 		{
-			// var nm:NotesGroup = unspawnNotes[unspawnNotes.length-1].isSustainNote ? sustains : notes;
-			var n:Note = Note.new(unspawnNotes[unspawnNotes.length - 1].StrumTime,
-				unspawnNotes[unspawnNotes.length - 1].NoteData,
+			// var nm:NotesGroup = UnspawnNotes[UnspawnNotes.length-1].isSustainNote ? sustains : notes;
+			var n:Note = Note.new(UnspawnNotes[UnspawnNotes.length - 1].StrumTime,
+				UnspawnNotes[UnspawnNotes.length - 1].NoteData,
 				notes.members[notes.members.length - 1],
 			false);
-			if (unspawnNotes[unspawnNotes.length - 1].SustainLength > (conductor.stepCrochet * 1.5))
+			if (UnspawnNotes[UnspawnNotes.length - 1].SustainLength > (conductor.stepCrochet * 1.5))
 			{
-				for (susNote in 0...Std.int(unspawnNotes[unspawnNotes.length - 1].SustainLength / conductor.stepCrochet))
+				for (susNote in 0...Std.int(UnspawnNotes[UnspawnNotes.length - 1].SustainLength / conductor.stepCrochet))
 				{
-					var n:Note = Note.new(unspawnNotes[unspawnNotes.length - 1].StrumTime + (conductor.stepCrochet * (susNote + 1)),
-						unspawnNotes[unspawnNotes.length - 1].NoteData,
+					var n:Note = Note.new(UnspawnNotes[UnspawnNotes.length - 1].StrumTime + (conductor.stepCrochet * (susNote + 1)),
+						UnspawnNotes[UnspawnNotes.length - 1].NoteData,
 						sustains.members[sustains.members.length - 1],
 					true);
-					sn.strumTime = unspawnNotes[unspawnNotes.length - 1].StrumTime;
-					sn.noteData = unspawnNotes[unspawnNotes.length - 1].NoteData;
-					sn.mustPress = unspawnNotes[unspawnNotes.length - 1].MustPress;
-					sn.noteType = unspawnNotes[unspawnNotes.length - 1].Type;
+					sn.strumTime = UnspawnNotes[UnspawnNotes.length - 1].StrumTime;
+					sn.noteData = UnspawnNotes[UnspawnNotes.length - 1].NoteData;
+					sn.mustPress = UnspawnNotes[UnspawnNotes.length - 1].MustPress;
+					sn.noteType = UnspawnNotes[UnspawnNotes.length - 1].Type;
 					sn.parent = n;
 					sustains.add(sn);
 					sustains.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
 				}
 			}
-			n.strumTime = unspawnNotes[unspawnNotes.length - 1].StrumTime;
-			n.noteData = unspawnNotes[unspawnNotes.length - 1].NoteData;
-			n.mustPress = unspawnNotes[unspawnNotes.length - 1].MustPress;
-			n.noteType = unspawnNotes[unspawnNotes.length - 1].Type;
+			n.strumTime = UnspawnNotes[UnspawnNotes.length - 1].StrumTime;
+			n.noteData = UnspawnNotes[UnspawnNotes.length - 1].NoteData;
+			n.mustPress = UnspawnNotes[UnspawnNotes.length - 1].MustPress;
+			n.noteType = UnspawnNotes[UnspawnNotes.length - 1].Type;
 			notes.add(n);
 			notes.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
-			unspawnNotes.pop();
+			UnspawnNotes.pop();
 		}
 
-		while (eventNotes[eventNotes.length - 1] != null && conductor.songPosition > eventNotes[eventNotes.length - 1].StrumTime)
+		while (EventNotes[EventNotes.length - 1] != null && conductor.songPosition > EventNotes[EventNotes.length - 1].StrumTime)
 		{
 			var value1:String = '';
-			if(eventNotes[eventNotes.length-1].Value1 != null)
-				value1 = eventNotes[eventNotes.length-1].Value1;
+			if(EventNotes[EventNotes.length-1].Value1 != null)
+				value1 = EventNotes[EventNotes.length-1].Value1;
 
-			var value2:String = '';
-			if(eventNotes[eventNotes.length-1].Value2 != null)
-				value2 = eventNotes[eventNotes.length-1].Value2;
+			var Value2:String = '';
+			if(EventNotes[EventNotes.length-1].Value2 != null)
+				Value2 = EventNotes[EventNotes.length-1].Value2;
 
-			var value2:String = '';
-			if(eventNotes[eventNotes.length-1].Value3 != null)
-				value2 = eventNotes[eventNotes.length-1].Value3;
+			var Value3:String = '';
+			if(EventNotes[EventNotes.length-1].Value3 != null)
+				Value3 = EventNotes[EventNotes.length-1].Value3;
 
-			triggerEventNote(eventNotes.pop(), value1, value2, value3);
+			triggerEventNote(EventNotes.pop(), Value1, Value2, Value3);
 		}
 	}
 
