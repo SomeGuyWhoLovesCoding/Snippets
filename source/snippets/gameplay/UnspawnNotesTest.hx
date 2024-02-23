@@ -79,19 +79,22 @@ class UnspawnNotesTest extends BaseClassSnippet {
 				unspawnNotes[unspawnNotes.length - 1].NoteData,
 				notes.members[notes.members.length - 1],
 			false);
-			for (susNote in 0...Std.int(unspawnNotes[unspawnNotes.length - 1].SustainLength / conductor.stepCrochet))
+			if (unspawnNotes[unspawnNotes.length - 1].SustainLength > (conductor.stepCrochet * 1.5))
 			{
-				var n:Note = Note.new(unspawnNotes[unspawnNotes.length - 1].StrumTime + (conductor.stepCrochet * (susNote + 1)),
-					unspawnNotes[unspawnNotes.length - 1].NoteData,
-					sustains.members[sustains.members.length - 1],
-				true);
-				sn.strumTime = unspawnNotes[unspawnNotes.length - 1].StrumTime;
-				sn.noteData = unspawnNotes[unspawnNotes.length - 1].NoteData;
-				sn.mustPress = unspawnNotes[unspawnNotes.length - 1].MustPress;
-				sn.noteType = unspawnNotes[unspawnNotes.length - 1].Type;
-				sn.parent = n;
-				sustains.add(sn);
-				sustains.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
+				for (susNote in 0...Std.int(unspawnNotes[unspawnNotes.length - 1].SustainLength / conductor.stepCrochet))
+				{
+					var n:Note = Note.new(unspawnNotes[unspawnNotes.length - 1].StrumTime + (conductor.stepCrochet * (susNote + 1)),
+						unspawnNotes[unspawnNotes.length - 1].NoteData,
+						sustains.members[sustains.members.length - 1],
+					true);
+					sn.strumTime = unspawnNotes[unspawnNotes.length - 1].StrumTime;
+					sn.noteData = unspawnNotes[unspawnNotes.length - 1].NoteData;
+					sn.mustPress = unspawnNotes[unspawnNotes.length - 1].MustPress;
+					sn.noteType = unspawnNotes[unspawnNotes.length - 1].Type;
+					sn.parent = n;
+					sustains.add(sn);
+					sustains.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
+				}
 			}
 			n.strumTime = unspawnNotes[unspawnNotes.length - 1].StrumTime;
 			n.noteData = unspawnNotes[unspawnNotes.length - 1].NoteData;
@@ -102,7 +105,8 @@ class UnspawnNotesTest extends BaseClassSnippet {
 			unspawnNotes.pop();
 		}
 
-		while (eventNotes[eventNotes.length - 1] != null && conductor.songPosition > eventNotes[eventNotes.length - 1].StrumTime) {
+		while (eventNotes[eventNotes.length - 1] != null && conductor.songPosition > eventNotes[eventNotes.length - 1].StrumTime)
+		{
 			var value1:String = '';
 			if(eventNotes[eventNotes.length-1].Value1 != null)
 				value1 = eventNotes[eventNotes.length-1].Value1;
@@ -119,10 +123,13 @@ class UnspawnNotesTest extends BaseClassSnippet {
 		}
 	}
 
-	dynamic function triggerEventNote(event:ChartEvent, v1:String, v2:String, v3:String):Void {
-		switch (event.Name) {
+	dynamic function triggerEventNote(event:ChartEvent, v1:String, v2:String, v3:String):Void
+	{
+		switch (event.Name)
+		{
 			case "Change BPM":
-				if (event.Type == TEMPO) {
+				if (event.Type == TEMPO)
+				{
 					// Change BPM to Std.parseFloat(v1)
 				}
 		}
