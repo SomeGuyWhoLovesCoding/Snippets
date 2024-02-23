@@ -119,11 +119,11 @@ class UnspawnNotesTest extends BaseClassSnippet {
 		}
 	}
 
-	dynamic function triggerEventNote(e:ChartEvent, v1:String, v2:String, v3:String):Void {
-		switch(e.Name) {
+	dynamic function triggerEventNote(event:ChartEvent, v1:String, v2:String, v3:String):Void {
+		switch (event.Name) {
 			case "Change BPM":
-				if (e.Type == TEMPO) {
-					// Change BPM
+				if (event.Type == TEMPO) {
+					// Change BPM to Std.parseFloat(v1)
 				}
 		}
 	}
