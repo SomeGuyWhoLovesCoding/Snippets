@@ -32,8 +32,11 @@ class Note extends flixel.FlxBasic {
 	public var noteData:Int = 0;
 	public var mustPress:Bool = true;
 	public var noteType:String = '';
+
 	public var isSustainNote:Bool = false;
 	public var sustainLength:Float = 0.0;
+	public var tail:Array<Note> = [];
+
 	public var prevNote:Null<Note> = null;
 	public var parent:Null<Note> = null;
 
@@ -70,7 +73,7 @@ class UnspawnNotesTest extends BaseClassSnippet {
 		add(Notes);
 		add(Sustains);
 
-		var P:{Gameplay:{Notes:Array<ChartNote>, Events:Array<ChartEvent>}} = haxe.Json.parse(sys.io.File.getContent('assets/data/test/test-hard.json'));
+		var P:{Gameplay:{Notes:Array<ChartNote>, Events:Array<ChartEvent>}} = haxe.Json.parse(sys.io.File.getContent('assets/data/test/test-sustain.json'));
 		UnspawnNotes = P.Gameplay.Notes;
 		EventNotes = P.Gameplay.Events;
 		UnspawnNotes.sort((b, a) -> Std.int(a.StrumTime - b.StrumTime));
@@ -85,30 +88,35 @@ class UnspawnNotesTest extends BaseClassSnippet {
 
 		Conductor.songPosition = flixel.FlxG.sound.music.time;
 
-		while (UnspawnNotes[UnspawnNotes.length - 1] != null
-			&& Conductor.songPosition > UnspawnNotes[UnspawnNotes.length - 1].StrumTime - (2000))
+		while (UnspawnNotes[UnspawnNotes.length - 1] != null && (Conductor.songPosition > UnspawnNotes[UnspawnNotes.length - 1].StrumTime))
 		{
-			var n:Note = new Note(UnspawnNotes[UnspawnNotes.length - 1].StrumTime, UnspawnNotes[UnspawnNotes.length - 1].NoteData, Notes.members[Notes.members.length - 1], false);
-			if (UnspawnNotes[UnspawnNotes.length - 1].SustainLength > (Conductor.stepCrochet * 1.5))
-			{
-				for (susNote in 0...Std.int(UnspawnNotes[UnspawnNotes.length - 1].SustainLength / Conductor.stepCrochet))
-				{
-					var sn:Note = new Note(UnspawnNotes[UnspawnNotes.length - 1].StrumTime + (Conductor.stepCrochet * (susNote + 1)), UnspawnNotes[UnspawnNotes.length - 1].NoteData, Sustains.members[Sustains.members.length - 1], true);
-					sn.mustPress = UnspawnNotes[UnspawnNotes.length - 1].MustPress;
-					sn.noteType = UnspawnNotes[UnspawnNotes.length - 1].Type;
-					sn.parent = n;
-					Sustains.add(sn);
-					Sustains.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
-					trace('spawned sus note $susNote at ${sn.strumTime}');
-				}
-			}
+			var n:Note = new Note(UnspawnNotes[UnspawnNotes.length - 1].StrumTime,
+				UnspawnNotes[UnspawnNotes.length - 1].NoteData,
+				Notes.members[Notes.members.length - 1], false);
 			n.mustPress = UnspawnNotes[UnspawnNotes.length - 1].MustPress;
 			n.noteType = UnspawnNotes[UnspawnNotes.length - 1].Type;
 			n.sustainLength = UnspawnNotes[UnspawnNotes.length - 1].SustainLength;
+			if (Notes.members.contains(n)) {
+				var sn:Note = new Note(n.strumTime + (Conductor.stepCrochet * (n.tail.length + 1)), n.noteData,
+					Sustains.members[Notes.members.length - 1], false);
+				Sustains.add(n);
+				Sustains.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
+				n.tail.push(n);
+				n.tail.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
+				trace('spawned sus note ${Notes.members[Notes.members.length - 1].tail.length} at ${sn.strumTime}');
+				if (n.tail.length == Std.int(n.sustainLength / Conductor.stepCrochet)) break;
+				continue;
+			}
 			Notes.add(n);
 			Notes.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
+			trace('spawned note ${UnspawnNotes.length - 1} at ${n.strumTime}');
 			UnspawnNotes.pop();
 		}
+
+		/*while (Notes.members[Notes.members.length - 1] != null && Notes.members[Notes.members.length - 1].sustainLength > Conductor.stepCrochet * 1.5 && 
+			Notes.members[Notes.members.length - 1].tail.length < Std.int(UnspawnNotes[UnspawnNotes.length - 1].SustainLength / Conductor.stepCrochet)) {
+
+		}*/
 
 		while (EventNotes[EventNotes.length - 1] != null && Conductor.songPosition > EventNotes[EventNotes.length - 1].StrumTime)
 		{

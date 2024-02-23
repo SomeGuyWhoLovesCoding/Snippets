@@ -1,0 +1,36 @@
+{
+	"Meta": {
+		"Song": "Test",
+		"BPM": 150.0,
+		"Speed": 1.0,
+		"TimeSignature": {
+			"Beats": 4,
+			"Steps": 4,
+			"Bars": 1
+		},
+		"NeedsVoices": true
+	},
+	"Gameplay": {
+		"Notes": [
+			{
+				"StrumTime": 200.0,
+				"NoteData": 0,
+				"SustainLength": 1200.0,
+				"Type": "Default",
+				"MustPress": false
+			},
+			{
+				"StrumTime": 400.0,
+				"NoteData": 3,
+				"SustainLength": 1200.0,
+				"Type": "Default",
+				"MustPress": false
+			}
+		],
+		"Events": [],
+		"Dad": "bf",
+		"Boyfriend": "bf",
+		"Girlfriend": "gf",
+		"Stage": "stage"
+	}
+}
