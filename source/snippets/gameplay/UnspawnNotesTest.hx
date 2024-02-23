@@ -61,8 +61,9 @@ class UnspawnNotesTest extends BaseClassSnippet {
 	{
 		super.create();
 
-		UnspawnNotes = haxe.Json.parse(Paths.json('test/test-hard')).Gameplay.Notes;
-		EventNotes = haxe.Json.parse(Paths.json('test/test-hard')).Gameplay.Events;
+		var P = haxe.Json.parse(Paths.json('test/test-hard'));
+		UnspawnNotes = P.Gameplay.Notes;
+		EventNotes = P.Gameplay.Events;
 		UnspawnNotes.sort((b, a) -> Std.int(a.StrumTime - b.StrumTime));
 		EventNotes.sort((b, a) -> Std.int(a.StrumTime - b.StrumTime));
 	}
