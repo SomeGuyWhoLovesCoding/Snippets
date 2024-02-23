@@ -1,0 +1,59 @@
+{
+	"Meta": {
+		"Song": "Test",
+		"BPM": 150.0,
+		"Speed": 1.0,
+		"TimeSignature": {
+			"Beats": 4,
+			"Steps": 4,
+			"Bars": 1
+		},
+		"NeedsVoices": true
+	},
+	"Gameplay": {
+		"Notes": [
+			{
+				"StrumTime": 0.0,
+				"NoteData": 0,
+				"SustainLength": 400.0,
+				"Type": "Default",
+				"MustPress": false
+			},
+			{
+				"StrumTime": 0.0,
+				"NoteData": 1,
+				"SustainLength": 400.0,
+				"Type": "Default",
+				"MustPress": false
+			},
+			{
+				"StrumTime": 0.0,
+				"NoteData": 2,
+				"SustainLength": 400.0,
+				"Type": "Default",
+				"MustPress": true
+			},
+			{
+				"StrumTime": 0.0,
+				"NoteData": 3,
+				"SustainLength": 400.0,
+				"Type": "Default",
+				"MustPress": true
+			}
+		],
+		"Events": [
+			{
+				"Type": "tempo",
+				"Name": "Change BPM",
+				"Value1": "75",
+				"Value2": "",
+				"Offset": 0.0,
+				"StrumTime": 800.0
+			}
+		],
+		"Dad": "bf",
+		"Boyfriend": "bf",
+		"Girlfriend": "gf",
+		"Stage": "stage"
+	}
+}
