@@ -47,33 +47,28 @@ class Note extends flixel.FlxBasic {
 	}
 }
 
-typedef Conductor = {
-	songPosition:Float,
-	stepCrochet:Float
-}
-
 // The unspawn notes snippet. This shows how you can spawn notes without having to preallocate them, which saves on loading times.
 // THIS IS THE FIRST EVER SNIPPET IN THIS REPOSITORY.
 
 class UnspawnNotesTest extends BaseClassSnippet {
+	public var SpawnTime:Float = 2000.0;
+
 	public var UnspawnNotes:Array<ChartNote> = [];
 	public var EventNotes:Array<ChartEvent> = [];
 
-	public var camHUD:{zoom:Float} = {zoom: 1.0};
+	public var Notes:FlxTypedGroup<Note>;
+	public var Sustains:FlxTypedGroup<Note>;
 
-	public var notes:FlxTypedGroup<Note>;
-	public var sustains:FlxTypedGroup<Note>;
-
-	public var conductor:Conductor = {songPosition: 0.0, stepCrochet: 100.0};
+	public var Conductor:{songPosition:Float, stepCrochet:Float} = {songPosition: 0.0, stepCrochet: 100.0}; // This won't be included in the final snippet, this is just a placeholder
 
 	override public function create():Void
 	{
 		super.create();
 
-		notes = new FlxTypedGroup<Note>();
-		sustains = new FlxTypedGroup<Note>();
-		add(notes);
-		add(sustains);
+		Notes = new FlxTypedGroup<Note>();
+		Sustains = new FlxTypedGroup<Note>();
+		add(Notes);
+		add(Sustains);
 
 		var P:{Gameplay:{Notes:Array<ChartNote>, Events:Array<ChartEvent>}} = haxe.Json.parse(sys.io.File.getContent('assets/data/test/test-hard.json'));
 		UnspawnNotes = P.Gameplay.Notes;
@@ -88,35 +83,36 @@ class UnspawnNotesTest extends BaseClassSnippet {
 	{
 		super.update(elapsed);
 
-		conductor.songPosition = flixel.FlxG.sound.music.time;
+		Conductor.songPosition = flixel.FlxG.sound.music.time;
+		trace(Conductor.songPosition);
 
 		while (UnspawnNotes[UnspawnNotes.length - 1] != null
-			&& conductor.songPosition > UnspawnNotes[UnspawnNotes.length - 1].StrumTime - (2000))
+			&& Conductor.songPosition > UnspawnNotes[UnspawnNotes.length - 1].StrumTime - (2000))
 		{
 			// var nm:NotesGroup = UnspawnNotes[UnspawnNotes.length-1].isSustainNote ? sustains : notes;
-			var n:Note = new Note(UnspawnNotes[UnspawnNotes.length - 1].StrumTime, UnspawnNotes[UnspawnNotes.length - 1].NoteData, notes.members[notes.members.length - 1], false);
-			if (UnspawnNotes[UnspawnNotes.length - 1].SustainLength > (conductor.stepCrochet * 1.5))
+			var n:Note = new Note(UnspawnNotes[UnspawnNotes.length - 1].StrumTime, UnspawnNotes[UnspawnNotes.length - 1].NoteData, Notes.members[Notes.members.length - 1], false);
+			if (UnspawnNotes[UnspawnNotes.length - 1].SustainLength > (Conductor.stepCrochet * 1.5))
 			{
-				for (susNote in 0...Std.int(UnspawnNotes[UnspawnNotes.length - 1].SustainLength / conductor.stepCrochet))
+				for (susNote in 0...Std.int(UnspawnNotes[UnspawnNotes.length - 1].SustainLength / Conductor.stepCrochet))
 				{
-					var sn:Note = new Note(UnspawnNotes[UnspawnNotes.length - 1].StrumTime + (conductor.stepCrochet * (susNote + 1)), UnspawnNotes[UnspawnNotes.length - 1].NoteData, sustains.members[sustains.members.length - 1], true);
+					var sn:Note = new Note(UnspawnNotes[UnspawnNotes.length - 1].StrumTime + (Conductor.stepCrochet * (susNote + 1)), UnspawnNotes[UnspawnNotes.length - 1].NoteData, Sustains.members[Sustains.members.length - 1], true);
 					sn.mustPress = UnspawnNotes[UnspawnNotes.length - 1].MustPress;
 					sn.noteType = UnspawnNotes[UnspawnNotes.length - 1].Type;
 					sn.parent = n;
-					sustains.add(sn);
-					sustains.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
+					Sustains.add(sn);
+					Sustains.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
 					trace('spawned sus note $susNote at ${sn.strumTime}');
 				}
 			}
 			n.mustPress = UnspawnNotes[UnspawnNotes.length - 1].MustPress;
 			n.noteType = UnspawnNotes[UnspawnNotes.length - 1].Type;
 			n.sustainLength = UnspawnNotes[UnspawnNotes.length - 1].SustainLength;
-			notes.add(n);
-			notes.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
+			Notes.add(n);
+			Notes.members.sort((b, a) -> Std.int(a.strumTime - b.strumTime));
 			UnspawnNotes.pop();
 		}
 
-		while (EventNotes[EventNotes.length - 1] != null && conductor.songPosition > EventNotes[EventNotes.length - 1].StrumTime)
+		while (EventNotes[EventNotes.length - 1] != null && Conductor.songPosition > EventNotes[EventNotes.length - 1].StrumTime)
 		{
 			var Value1:String = '';
 			if(EventNotes[EventNotes.length-1].Value1 != null)
